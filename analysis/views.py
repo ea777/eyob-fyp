@@ -24,7 +24,7 @@ def index(request):
     else:
         print("Directory is not empty")
 
-    my_excelfile = os.path.join(THIS_FOLDER, 'excelfiles/excelfilesbunsen-burger_reviews.xlsx')
+    my_excelfile = os.path.join(THIS_FOLDER, 'excelfiles')
 
     # read form excel as dataframe
     df = pd.read_excel(my_excelfile, sheet_name='Sheet1')
