@@ -5,15 +5,16 @@ def pulling_excelfiles():
     import boto3
     import os
 
-
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-    s3=boto3.client('s3')
+    s3 = boto3.client('s3',
+                        aws_access_key_id="AKIAQNWFAMNKQJCAPMHG",
+                        aws_secret_access_key="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")
     list=s3.list_objects(Bucket='fypsentanalysis')['Contents']
     print(list)
     for key in list:
         s3.download_file('fypsentanalysis', key['Key'], key['Key'])
-        source = os.path.join(THIS_FOLDER, key['Key'])
+        source = os.path.join(os.path.dirname(THIS_FOLDER), key['Key'])
         destination_folder = os.path.join(THIS_FOLDER, "excelfiles")
         destination = os.path.join(destination_folder, key['Key'])
         move(source, destination)
