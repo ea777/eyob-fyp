@@ -83,7 +83,7 @@ def add_keywords(count, data, worksheet, book):
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 raw_folder = os.path.join(THIS_FOLDER, 'raw_excelfiles')
-raw_excelfile = os.path.join(raw_folder, 'west-cork-burger_reviews.xlsx')
+raw_excelfile = os.path.join(raw_folder, 'bunsen-burger_reviews.xlsx')
 # making data frame from csv file
 dataframe = pd.read_excel(raw_excelfile)
 # retrieving just the comments.
