@@ -2,53 +2,29 @@
 
 {%block content%}
 
-<!--<table class="table table-hover">-->
-<!--  <thead>-->
-<!--    <tr>-->
-<!--      <th scope="col">Name</th>-->
-<!--      <th scope="col">Review</th>-->
-<!--      <th scope="col">Date</th>-->
-<!--      <th scope="col">SA</th>-->
 
-<!--    </tr>-->
-<!--  </thead>-->
-<!--  <tbody>-->
-<!--    {% for row in response %}-->
-<!--        <tr>-->
-<!--          <td>{{ row.0 }}</td>-->
-<!--          <td>{{ row.1 }}</td>-->
-<!--          <td>{{ row.2 }}</td>-->
-<!--          <td>{{ row.3 }}</td>-->
-
-<!--        </tr>-->
-<!--    {% endfor %}-->
-
-
-<!--  </tbody>-->
-<!--</table>-->
-
-	<div class="list-group" id="accesspoint">
+<div class="list-group" id="accesspoint">
 <!--		<div class="input-group input-group-lg">-->
 <!--		  <div class="input-group-prepend">-->
 <!--			<span class="input-group-text" id="inputGroup-sizing-lg">Search</span>-->
 <!--		  </div>-->
 <!--		  <input type="text" class="form-control search" aria-label="Large" aria-describedby="inputGroup-sizing-sm">-->
 <!--		</div>-->
-		<br>
-		<div class="list">
-          <p  class="list-group-item list-group-item-action flex-column align-items-start text-center disabled">
-            Shop Names
-          </p>
-		  {% for shop in shop_names %}
+    <br>
+    <div class="list">
+      <p  class="list-group-item list-group-item-action flex-column align-items-start text-center disabled">
+        Shop Names
+      </p>
+      {% for shop in shops %}
 <!--		   <li>-->
-			<a href="{% url 'shop_table' id=shop %}" class="list-group-item list-group-item-action flex-column align-items-start">
-				{{ shop }}
-            </a>
+        <a href="{% url 'shop_table' id=shop.name %}" class="list-group-item list-group-item-action flex-column align-items-start">
+            {{ shop.name }} <span class="badge badge-pill badge-primary">{{ shop.sa }}</span>
+        </a>
 <!--		   </li>-->
-		  {% endfor %}
+      {% endfor %}
 
-		</div>
+    </div>
 
-	</div>
+</div>
 
 {% endblock %}
