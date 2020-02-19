@@ -1,0 +1,100 @@
+<!DOCTYPE html> <!--https://www.chartjs.org/docs/latest/,website for graphs -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<canvas id="chart" width="200" height="75" style="background-color: #090808;"></canvas>
+
+<script>
+const xlabels = [];
+const yscores = [];
+chartIt();
+
+async function chartIt(){
+await getdata();
+var ctx = document.getElementById('chart').getContext('2d');
+var myColors=[];
+// https://jsfiddle.net/uq99110j/6/
+$.each(yscores, function( yscores,value ) {
+  if(value>0){
+  	 myColors[yscores]="#66FF66";
+  }else if(value=0){
+     myColors[yscores]="orange";
+  }else{
+  	myColors[yscores]="#ED0A3F";
+  }
+});
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: xlabels,
+        datasets: [{
+            label: 'Sentimental Analysis Scores',
+            data: yscores,
+            fill: false,
+            backgroundColor:myColors,
+            borderColor:"white",
+            fontFamily: "Verdana",
+            borderWidth: 1
+
+        }]
+    },
+        options: { // https://www.youtube.com/watch?v=AcoUu3bgKgM, yt clip for resizing scale
+        legend: {
+         labels: {
+            fontColor: 'white'
+
+         }
+      },
+        scales: {
+
+        yAxes: [{
+         gridLines: {
+                display: false,
+                fontColor:"white",
+
+                ticks: {
+                 max: 1,
+                 min: -1,
+                 stepSize: 0.01
+
+       }
+        }
+      }]
+    }
+  }
+});
+
+
+
+
+
+
+
+
+
+    async function getdata(){
+        const response = await fetch('bunsen-burger_reviews.csv');
+        const data = await response.text();
+
+        const table = data.split('\n').slice(1);
+        table.forEach(elt =>{
+        const columns = elt.split(',');
+        const date = columns[2];
+        xlabels.push(date);
+        const score = columns[4];
+        yscores.push(score);
+
+        console.log(date,score);
+
+
+ });
+     }
+}
+</script>
+</body>
+</html>
