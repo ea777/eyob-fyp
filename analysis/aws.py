@@ -18,6 +18,26 @@ def pulling_excelfiles():
         destination_folder = os.path.join(THIS_FOLDER, "excelfiles")
         destination = os.path.join(destination_folder, key['Key'])
         move(source, destination)
+        
+def pulling_csvfiles():
+
+    from shutil import move
+    import boto3
+    import os
+
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+
+    s3 = boto3.client('s3',
+                        aws_access_key_id=os.environ['AWS_ID'],
+                        aws_secret_access_key=os.environ['AWS_KEY'])
+    list=s3.list_objects(Bucket='fypcsvfiles')['Contents']
+    print(list)
+    for key in list:
+        s3.download_file('fypcsvfiles', key['Key'], key['Key'])
+        source = os.path.join(os.path.dirname(THIS_FOLDER), key['Key'])
+        destination_folder = os.path.join(THIS_FOLDER, "csvfiles")
+        destination = os.path.join(destination_folder, key['Key'])
+        move(source, destination)        
 
 
 def upload_file(file_name, object_name=None):
