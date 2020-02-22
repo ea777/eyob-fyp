@@ -8,8 +8,8 @@ def pulling_excelfiles():
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
     s3 = boto3.client('s3',
-                        aws_access_key_id="AKIAJ7AVSUCGSZCDNK5Q",
-                        aws_secret_access_key="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")
+                        aws_access_key_id=os.environ['AWS_ID'],
+                        aws_secret_access_key=os.environ['AWS_KEY'])
     list=s3.list_objects(Bucket='fypsentanalysis')['Contents']
     print(list)
     for key in list:
