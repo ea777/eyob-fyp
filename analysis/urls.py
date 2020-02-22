@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
 
     path('shop_table/<str:id>', views.shop_table, name='shop_table'),
+    path('shop_chart', views.shop_chart, name='shop_chart'),
+
 
 
 ]

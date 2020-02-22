@@ -14,12 +14,12 @@ def index(request):
     else:
         print("Directory is not empty")
         excel_files = os.listdir(os.path.join(THIS_FOLDER, "excelfiles"))
-        # split the file name before the underscore and get the name
-        # then replace the hyphens with space
 
     # list to store the detail of shops
     shops = []
     for file in excel_files:
+        # split the file name before the underscore and get the name
+        # then replace the hyphens with space
         name = ((file.split('_', 1)[0]).replace("-", " ")).title()
 
         # read form excel as dataframe
@@ -66,3 +66,14 @@ def shop_table(request, id):
     return render(request, 'shopTable.html', {"response": Row_list})
 
 
+def shop_chart(request):
+
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    if len(os.listdir(os.path.join(THIS_FOLDER, "csvfiles"))) == 0:
+        print("Directory is empty")
+        aws.pulling_csvfiles()
+    else:
+        print("Directory is not empty")
+        csv_files = os.listdir(os.path.join(THIS_FOLDER, "csvfiles"))
+
+    return render(request, 'charts.html')
