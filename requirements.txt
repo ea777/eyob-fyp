@@ -12,6 +12,7 @@ Django==3.0.2
 django-bootstrap4==0.0.6
 django-crispy-forms==1.8.1
 django-heroku==0.3.1
+django-storages==1.9.1
 docutils==0.15.2
 et-xmlfile==1.0.1
 future==0.17.1
