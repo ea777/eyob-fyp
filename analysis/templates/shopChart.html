@@ -1,16 +1,19 @@
-<html lang="en">
-<head>
-    {% load static %}
+{% extends 'base.html'%}
 
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"></script>
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.628.0.min.js"></script>
+{%block content%}
 
-</head>
-<body>
+{% load static %}
+
+<div class="list-group">
+    <br>
+    <div class="list">
+      <a  href="{% url 'shop_table' id=response.name %}"
+          class="list-group-item list-group-item-action list-group-item-info flex-column align-items-start text-center">
+        Table View
+      </a>
+    </div>
+
+</div>
 <canvas id="chart" width="200" height="75" style="background-color: #090808;"></canvas>
 
 <script> <!--https://www.chartjs.org/docs/latest/,website for graphs -->
@@ -76,7 +79,7 @@ async function chartIt(){
     });
 
     async function getdata(){
-        const response = await fetch("{% static  response %}");
+        const response = await fetch("{% static  response.csv %}");
         const data = await response.text();
 
         const table = data.split('\n').slice(1);
@@ -91,5 +94,5 @@ async function chartIt(){
     }
 }
 </script>
-</body>
-</html>
+
+{% endblock %}

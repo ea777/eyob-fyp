@@ -3,13 +3,7 @@
 {%block content%}
 
 
-<div class="list-group" id="accesspoint">
-<!--		<div class="input-group input-group-lg">-->
-<!--		  <div class="input-group-prepend">-->
-<!--			<span class="input-group-text" id="inputGroup-sizing-lg">Search</span>-->
-<!--		  </div>-->
-<!--		  <input type="text" class="form-control search" aria-label="Large" aria-describedby="inputGroup-sizing-sm">-->
-<!--		</div>-->
+<div class="list-group">
     <br>
     <div class="list">
       <p  class="list-group-item list-group-item-action flex-column align-items-start text-center disabled">
@@ -17,7 +11,8 @@
       </p>
       {% for shop in shops %}
 <!--		   <li>-->
-        <a href="{% url 'shop_table' id=shop.name %}" class="list-group-item list-group-item-action flex-column align-items-start">
+        <a href="{% url 'shop_chart' id=shop.name %}"
+           class="list-group-item list-group-item-action list-group-item-dark flex-column text-center">
             {{ shop.name }} <span class="badge badge-pill badge-primary">{{ shop.sa }}</span>
         </a>
 <!--		   </li>-->

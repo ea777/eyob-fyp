@@ -62,8 +62,8 @@ def shop_table(request, id):
 
         # append the list to the final list
         Row_list.append(my_list)
-
-    return render(request, 'shopTable.html', {"response": Row_list})
+        response = {"name": id, "rows": Row_list}
+    return render(request, 'shopTable.html', {"response": response})
 
 
 def shop_chart(request, id):
@@ -78,4 +78,5 @@ def shop_chart(request, id):
 
     my_csvfile = 'csvfiles/'+(id.lower().replace(" ", "-")) + '_reviews.csv'
 
-    return render(request, 'charts.html', {"response": str(my_csvfile)})
+    response = {"name": id, "csv": my_csvfile}
+    return render(request, 'shopChart.html', {"response": response})
