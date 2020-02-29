@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'analysis',
     'crispy_forms',
-
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -120,7 +120,18 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+# STATIC_ROOT = ''
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = ( os.path.join('static'), )
 
-STATIC_URL = '/static/'
+AWS_ACCESS_KEY_ID = os.environ['AWS_ID'],
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_KEY'],
+AWS_STORAGE_BUCKET_NAME = 'fypcsvfiles'
+
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATIC_URL = 'http://s3.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME + '/'
+
 django_heroku.settings(locals())
+
 

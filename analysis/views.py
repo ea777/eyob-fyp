@@ -66,14 +66,16 @@ def shop_table(request, id):
     return render(request, 'shopTable.html', {"response": Row_list})
 
 
-def shop_chart(request):
+def shop_chart(request, id):
 
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    if len(os.listdir(os.path.join(THIS_FOLDER, "csvfiles"))) == 0:
+    if len(os.listdir(os.path.join(THIS_FOLDER, "static/csvfiles"))) == 0:
         print("Directory is empty")
         aws.pulling_csvfiles()
     else:
         print("Directory is not empty")
-        csv_files = os.listdir(os.path.join(THIS_FOLDER, "csvfiles"))
+        csv_files = os.listdir(os.path.join(THIS_FOLDER, "static/csvfiles"))
 
-    return render(request, 'charts.html')
+    my_csvfile = 'csvfiles/'+(id.lower().replace(" ", "-")) + '_reviews.csv'
+
+    return render(request, 'charts.html', {"response": str(my_csvfile)})
