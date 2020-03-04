@@ -14,18 +14,33 @@
     </div>
 
 </div>
-<canvas id="chart" width="200" height="75" style="background-color: #090808;"></canvas>
+
+<div class="text-center">
+    <canvas id="chart" width="200" height="75" style="background-color: #090808;"></canvas>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-secondary" id="line-label">
+        <input type="radio" name="options" id="line" autocomplete="off"> Line Graph
+      </label>
+      <label class="btn btn-secondary" id="bar-label">
+        <input type="radio" name="options" id="bar" autocomplete="off"> Bar Graph
+      </label>
+    </div>
+</div>
 
 <script> <!--https://www.chartjs.org/docs/latest/,website for graphs -->
 const xlabels = [];
 const yscores = [];
-chartIt();
+const myColors=[];
 
-async function chartIt(){
+var myChart;
+
+setVars();
+
+async function setVars() {
+
 
     await getdata();
-    var ctx = document.getElementById('chart').getContext('2d');
-    var myColors=[];
+
     // https://jsfiddle.net/uq99110j/6/
     $.each(yscores, function( yscores,value ) {
       if(value>0){
@@ -37,46 +52,7 @@ async function chartIt(){
       }
     });
 
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: xlabels,
-            datasets: [{
-                label: 'Sentimental Analysis Scores',
-                data: yscores,
-                fill: false,
-                backgroundColor:myColors,
-                borderColor:"white",
-                fontFamily: "Verdana",
-                borderWidth: 1
-
-            }]
-        },
-            options: { // https://www.youtube.com/watch?v=AcoUu3bgKgM, yt clip for resizing scale
-            legend: {
-             labels: {
-                fontColor: 'white'
-
-             }
-          },
-            scales: {
-
-            yAxes: [{
-             gridLines: {
-                    display: false,
-                    fontColor:"white",
-
-                    ticks: {
-                     max: 1,
-                     min: -1,
-                     stepSize: 0.01
-
-           }
-            }
-          }]
-        }
-      }
-    });
+    line();
 
     async function getdata(){
         const response = await fetch("{% static  response.csv %}");
@@ -89,10 +65,93 @@ async function chartIt(){
             xlabels.push(date);
             const score = columns[4];
             yscores.push(score);
-
         });
     }
+
 }
+
+var config = {
+  type: 'line',
+    data: {
+        labels: xlabels,
+        datasets: [{
+            label: 'Sentimental Analysis Scores',
+            data: yscores,
+            fill: false,
+            backgroundColor:myColors,
+            borderColor:"white",
+            fontFamily: "Verdana",
+            borderWidth: 1
+
+        }]
+    },
+        options: { // https://www.youtube.com/watch?v=AcoUu3bgKgM, yt clip for resizing scale
+        legend: {
+         labels: {
+            fontColor: 'white'
+
+         }
+      },
+        scales: {
+
+        yAxes: [{
+         gridLines: {
+                display: false,
+                fontColor:"white",
+
+                ticks: {
+                 max: 1,
+                 min: -1,
+                 stepSize: 0.01
+
+       }
+        }
+      }]
+    }
+    }
+};
+
+$("#line").click(function() {
+  line();
+});
+
+$("#bar").click(function() {
+  bar();
+});
+
+function bar() {
+  document.getElementById("bar-label").classList.add("active");
+  document.getElementById("line-label").classList.remove("active");
+  change('bar');
+}
+
+function line() {
+  document.getElementById("line-label").classList.add("active");
+  document.getElementById("bar-label").classList.remove("active");
+  change('line');
+}
+
+async function change(newType) {
+
+
+  var ctx = document.getElementById("chart").getContext("2d");
+
+  // Remove the old chart and all its event handles
+  if (myChart) {
+    myChart.destroy();
+  }
+
+  // Chart.js modifies the object you pass in. Pass a copy of the object so we can use the original object later
+  var temp = jQuery.extend(true, {}, config);
+  temp.type = newType;
+  myChart = new Chart(ctx, temp);
+
+
+};
+
+
+
+
 </script>
 
 {% endblock %}
