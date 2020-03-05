@@ -8,12 +8,18 @@ from analysis import aws
 def index(request):
 
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    if len(os.listdir(os.path.join(THIS_FOLDER, "excelfiles"))) == 0:
-        print("Directory is empty")
+    # first check if the folder exists
+    if os.path.exists((os.path.join(THIS_FOLDER, "excelfiles"))) != True:
+        print("Directory doesn't exist - Creating")
+        os.mkdir((os.path.join(THIS_FOLDER, "excelfiles")))
         aws.pulling_excelfiles()
     else:
-        print("Directory is not empty")
-        excel_files = os.listdir(os.path.join(THIS_FOLDER, "excelfiles"))
+        if len(os.listdir(os.path.join(THIS_FOLDER, "excelfiles"))) == 0:
+            print("Directory is empty")
+            aws.pulling_excelfiles()
+        else:
+            print("Directory is not empty")
+            excel_files = os.listdir(os.path.join(THIS_FOLDER, "excelfiles"))
 
     # list to store the detail of shops
     shops = []
