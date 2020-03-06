@@ -2,6 +2,7 @@ from django.shortcuts import render
 import pandas as pd
 import os
 from analysis import aws
+from analysis.helper_scripts.calc_avg_sa import calc_avg_sa
 
 
 # Create your views here.
@@ -28,17 +29,7 @@ def index(request):
         # then replace the hyphens with space
         name = ((file.split('_', 1)[0]).replace("-", " ")).title()
 
-        # read form excel as dataframe
-        my_excelfile = os.path.join(THIS_FOLDER, 'excelfiles/' + file)
-        df = pd.read_excel(my_excelfile, sheet_name='Sheet1')
-        # no need to display no.of reviews, so drop it
-        del df['Number of Reviews']
-        # Remove rows with 'Error'
-        df = df[~df.Label.str.contains("ERROR")]
-
-        # get the avg SA score
-        sa = round(df["SA"].mean()*100, 2)
-        shops.append({"name": name, "sa": sa})
+        shops.append({"name": name, "sa": calc_avg_sa(file)})
 
     # pass the names of the files to the index page
     return render(request, 'index.html', {"shops": shops})
@@ -68,7 +59,7 @@ def shop_table(request, id):
 
         # append the list to the final list
         Row_list.append(my_list)
-        response = {"name": id, "rows": Row_list}
+        response = {"name": id, "rows": Row_list, "avg_sa": calc_avg_sa((id.lower().replace(" ", "-"))+'_reviews.xlsx')}
     return render(request, 'shopTable.html', {"response": response})
 
 
@@ -83,6 +74,7 @@ def shop_chart(request, id):
         csv_files = os.listdir(os.path.join(THIS_FOLDER, "static/csvfiles"))
 
     my_csvfile = 'csvfiles/'+(id.lower().replace(" ", "-")) + '_reviews.csv'
+    my_excelfile = (id.lower().replace(" ", "-")) + '_reviews.xlsx'
 
-    response = {"name": id, "csv": my_csvfile}
+    response = {"name": id, "csv": my_csvfile, "avg_sa": calc_avg_sa(my_excelfile)}
     return render(request, 'shopChart.html', {"response": response})

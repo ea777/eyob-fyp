@@ -4,8 +4,23 @@
 
 {% load static %}
 
+<br>
+
+<div class="row text-white text-center">
+    <div class="col">
+      <h4><span class="badge badge-dark">Shop Name</span></h4>
+        {{ response.name }}
+    </div>
+    <div class="col">
+      <h4><span class="badge badge-dark">Avg. Sentimental Score</span></h4>
+      {{ response.avg_sa }}
+    </div>
+</div>
+
+<br>
+
 <div class="list-group">
-    <br>
+
     <div class="list">
       <a  href="{% url 'shop_table' id=response.name %}"
           class="list-group-item list-group-item-action list-group-item-info flex-column align-items-start text-center">
@@ -18,11 +33,11 @@
 <div class="text-center">
     <canvas id="chart" width="200" height="75" style="background-color: #090808;"></canvas>
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-secondary" id="line-label">
-        <input type="radio" name="options" id="line" autocomplete="off"> Line Graph
-      </label>
       <label class="btn btn-secondary" id="bar-label">
         <input type="radio" name="options" id="bar" autocomplete="off"> Bar Graph
+      </label>
+      <label class="btn btn-secondary" id="line-label">
+        <input type="radio" name="options" id="line" autocomplete="off"> Line Graph
       </label>
     </div>
 </div>
@@ -52,7 +67,7 @@ async function setVars() {
       }
     });
 
-    line();
+    bar();
 
     async function getdata(){
         const response = await fetch("{% static  response.csv %}");
@@ -75,7 +90,7 @@ var config = {
     data: {
         labels: xlabels,
         datasets: [{
-            label: 'Sentimental Analysis Scores',
+            label: 'Sentimental Analysis over a period of Time',
             data: yscores,
             fill: false,
             backgroundColor:myColors,
@@ -96,16 +111,16 @@ var config = {
 
         yAxes: [{
          gridLines: {
-                display: false,
-                fontColor:"white",
+            display: false,
+            fontColor:"white",
 
-                ticks: {
-                 max: 1,
-                 min: -1,
-                 stepSize: 0.01
+            ticks: {
+             max: 1,
+             min: -1,
+             stepSize: 0.01
 
-       }
-        }
+            }
+         }
       }]
     }
     }
@@ -118,6 +133,7 @@ $("#line").click(function() {
 $("#bar").click(function() {
   bar();
 });
+
 
 function bar() {
   document.getElementById("bar-label").classList.add("active");
