@@ -3,7 +3,10 @@ import pandas as pd
 import os
 from analysis import aws
 from analysis.helper_scripts.calc_avg_sa import calc_avg_sa
-
+from collections import Counter
+import json
+import nltk
+from nltk.corpus import stopwords
 
 # Create your views here.
 def index(request):
@@ -76,5 +79,52 @@ def shop_chart(request, id):
     my_csvfile = 'csvfiles/'+(id.lower().replace(" ", "-")) + '_reviews.csv'
     my_excelfile = (id.lower().replace(" ", "-")) + '_reviews.xlsx'
 
-    response = {"name": id, "csv": my_csvfile, "avg_sa": calc_avg_sa(my_excelfile)}
+    my_excelfile_keywords = os.path.join(THIS_FOLDER, 'excelfiles/' + (id.lower().replace(" ", "-")) + '_reviews.xlsx')
+
+    # read form excel as dataframe
+    df = pd.read_excel(my_excelfile_keywords, sheet_name='Sheet1')
+
+    # clear file first
+    open(os.path.join(THIS_FOLDER, 'static/keywords.txt'), 'w').close()
+
+    words_list = []
+    final_list_json = []
+
+    # Iterate over each Keywords column
+    for rows in df['Keywords']:
+        # Write into keywords txt
+        words = str(rows).replace(",", " ").lower()
+
+        punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
+
+        words_array = words.split(" ")
+
+        for word in words_array:
+            # remove punctuation from the word
+            no_punct = ""
+            for char in word:
+                if char not in punctuations:
+                    no_punct = no_punct + char
+
+            words_list.append(no_punct)
+
+    # using remove() to remove empty string from list
+    while "" in words_list:
+        words_list.remove("")
+
+    s = set(stopwords.words('english'))
+    final_words_list = [w for w in words_list if not w in s]
+
+    filtered_sentence = []
+
+    for w in final_words_list:
+        if w not in s:
+            filtered_sentence.append(w)
+
+    unique_words = set(filtered_sentence)
+    for word in unique_words:
+        d = Counter(filtered_sentence)
+        final_list_json.append({"word": word, "weight": ((d[word] / len(filtered_sentence)) * 100) * 2 })
+
+    response = {"name": id, "csv": my_csvfile, "avg_sa": calc_avg_sa(my_excelfile), "keywords": json.dumps(final_list_json)}
     return render(request, 'shopChart.html', {"response": response})
