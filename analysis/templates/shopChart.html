@@ -42,6 +42,17 @@
     </div>
 </div>
 
+<br>
+
+
+<div class="container-fluid text-center">
+    <h4><span class="badge badge-dark">What your customers are talking about!</span></h4>
+    <br>
+    <br>
+    <br>
+    <div id="wordCloud"></div>
+</div>
+
 <script> <!--https://www.chartjs.org/docs/latest/,website for graphs -->
 const xlabels = [];
 const yscores = [];
@@ -165,9 +176,58 @@ async function change(newType) {
 
 };
 
-
-
-
 </script>
+
+
+<script>
+
+<!--    https://www.jqueryscript.net/text/Word-Tag-Cloud-Generator-jQWCloud.html-->
+
+    const myData = {{ response.keywords|safe }}
+
+    $(document).ready(function() {
+
+        $("#wordCloud").jQWCloud({
+          words: myData
+        });
+
+    });
+
+    $("#wordCloud").jQWCloud({
+
+      // title
+      title: 'JQ WOrd Cloud',
+
+      // min/max font size
+      minFont: 20,
+      maxFont: 50,
+
+      // font offset
+      fontOffset: 0,
+
+      // shows the algorithm of creating the word cloud
+      showSpaceDIV: false,
+
+      // Enables the vertical alignment of words
+      verticalEnabled: true,
+
+      // color
+      cloud_color: null,
+
+      // font family
+      cloud_font_family: null,
+
+      // color of covering divs
+      spaceDIVColor: 'white',
+
+      // left padding of words
+      padding_left: null,
+
+      // classes with space to be applied on each word
+      word_common_classes: null
+
+    });
+</script>
+
 
 {% endblock %}
